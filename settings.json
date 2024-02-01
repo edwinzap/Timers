@@ -1,0 +1,28 @@
+{
+    "timers": [
+        {
+            "duration": 10,
+            "options": [1, 60, 120, 180]
+        },
+        {
+            "duration": 120,
+            "options": [1, 60, 120]
+        },
+        {
+            "duration": 360,
+            "options": [1, 60, 120]
+        },
+        {
+            "duration": 10,
+            "options": [1, 60, 120, 180]
+        },
+        {
+            "duration": 120,
+            "options": [1, 60, 120]
+        },
+        {
+            "duration": 360,
+            "options": [1, 60, 120]
+        }
+    ]
+}

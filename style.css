@@ -1,0 +1,98 @@
+:root {
+    --primary-color: #12405f;
+    --secondary-color: #dd3621;
+    --danger-color: #ef0a0d;
+    --warning-color: #e1c718;
+    --success-color: #169855;
+    --light-background-color: #cfdee9;
+    --dark-background-color: #0e1427;
+}
+
+body {
+    background-color: var(--light-background-color);
+}
+
+button {
+    border: none;
+    border-radius: 0.4em;
+    padding: 0.5em 1em;
+    margin: 0.3em;
+    color: white;
+    background-color: var(--primary-color);
+}
+
+button:hover {
+    cursor: pointer;
+    background-color: color-mix(in srgb, var(--primary-color) 80%, white);
+}
+
+#container {
+    margin-top: 3em;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.timer {
+    padding: 2em;
+    display: flex;
+    flex-direction: column;
+    min-width: 280px;
+}
+
+.timer .text {
+    font-size: 3em;
+    font-weight: bold;
+    text-align: center;
+}
+
+.controls, .options {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: center;
+    gap: 0.5em;
+}
+
+.control {
+    width:100%;
+}
+
+.control button {
+    width: 100%;
+}
+
+.option {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    background-color: var(--light-background-color);
+    overflow: hidden;
+    border-radius: 0.4em;
+    padding: 0;
+}
+
+.options button {
+    margin: 0;
+    padding: 0.2em 1.5em;
+    border-radius: 0;
+}
+
+.option .add {
+    background-color: var(--success-color);
+    /* border-radius: 0.4em 0.4em 0 0 ; */
+}
+
+.option .add:hover {
+    background-color: color-mix(in srgb, var(--success-color) 80%, white);
+}
+
+.option .substract {
+    background-color: var(--danger-color);
+    /* border-radius: 0 0 0.4em 0.4em; */
+}
+
+.option .substract:hover {
+    background-color: color-mix(in srgb, var(--danger-color) 80%, white);
+}
