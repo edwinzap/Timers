@@ -31,7 +31,6 @@ export class Timer {
     }
 
     public setDuration(duration: number) {
-        console.log("Initial duration: " + duration);
         this.initialDuration = Math.max(duration * 1000, 0);
         this.updateDuration(this.initialDuration);
     }
@@ -72,7 +71,6 @@ export class Timer {
         else {
             this.duration = newDuration;
         }
-        console.log("Duration: " + this.duration);
         this.updateRemainingTime();
     }
 

@@ -108,7 +108,6 @@ export class TimerView {
     }
 
     public setRemainingTime(seconds: number) {
-        console.log("Remaining time " + seconds);
         const minutes = Math.floor(seconds / 60);
         const remainingSeconds = seconds % 60;
         const timerText = (`${this.pad(minutes)}:${this.pad(remainingSeconds)}`);
