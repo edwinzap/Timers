@@ -1,3 +1,5 @@
+import { Tools } from "./tools.js";
+
 export class TimerView {
     private element: HTMLDivElement;
     private text: HTMLSpanElement;
@@ -13,6 +15,28 @@ export class TimerView {
     public constructor() {
         this.options = [];
         this.initView();
+    }
+
+    public setRemainingTime(seconds: number) {
+        this.text.textContent = Tools.secondsToText(seconds);
+    }
+
+    public setIsStarted(isStarted: boolean) {
+        if (isStarted) {
+            this.startButton.textContent = "Arrêter";
+        }
+        else {
+            this.startButton.textContent = "Démarrer";
+        }
+    }
+
+    public setOptions(options: number[]) {
+        this.options = options;
+        this.updateView();
+    }
+
+    public getElement(): HTMLDivElement {
+        return this.element;
     }
 
     private onClickStartButton() {
@@ -69,10 +93,6 @@ export class TimerView {
         this.addOptions();
     }
 
-    public getElement(): HTMLDivElement {
-        return this.element;
-    }
-
     private addOptions() {
         this.optionsDiv.innerHTML = "";
 
@@ -88,7 +108,7 @@ export class TimerView {
                 button.classList.add(createButtonOption.class);
                 button.textContent = createButtonOption.sign;
                 button.addEventListener('click', () => this.onClickOptionButton(option * createButtonOption.coef));
-                container.appendChild(button);                
+                container.appendChild(button);
             }
 
             let unit = "s"
@@ -106,28 +126,6 @@ export class TimerView {
             this.optionsDiv.appendChild(container);
         }
     }
-
-    public setRemainingTime(seconds: number) {
-        const minutes = Math.floor(seconds / 60);
-        const remainingSeconds = seconds % 60;
-        const timerText = (`${this.pad(minutes)}:${this.pad(remainingSeconds)}`);
-        this.text.textContent = timerText;
-    }
-
-    public setIsStarted(isStarted: boolean) {
-        if (isStarted) {
-            this.startButton.textContent = "Arrêter";
-        }
-        else {
-            this.startButton.textContent = "Démarrer";
-        }
-    }
-
-    public setOptions(options: number[]) {
-        this.options = options;
-        this.updateView();
-    }
-
 
     private pad(number: number) {
         return number < 10 ? '0' + number : number;

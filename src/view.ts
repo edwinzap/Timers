@@ -1,9 +1,10 @@
-import { Timer } from "./timer.js";
 import { Settings } from "./settings.js";
-import { TimerCommand, TimerCommandType } from "./timer-command.js";
+import { TimerController } from "./timer-controller.js";
+import { Observer, Subject, TimerMessage } from "./interfaces.js";
 
-export class View {
-    private timers: Timer[];
+export class View implements Observer{
+    private timers: TimerController[];
+    private simpleViewChannel: BroadcastChannel;
 
     public constructor() {
         this.initView();
@@ -11,26 +12,27 @@ export class View {
 
     public async initView() {
         const container = document.getElementById("container") as HTMLDivElement;
+        const simpleViewButton = document.createElement("button");
+        simpleViewButton.textContent = "Vue simplifiée";
+        simpleViewButton.onclick = () => {
+            window.open("/view.html");
+        }
+        document.body.insertBefore(simpleViewButton, container);
+
         const settings = await this.getSettings();
         this.timers = this.getTimers(settings);
-        container.append(...this.timers.map((timer) => timer.getElement()));
+        container.append(...this.timers.map((timer) => timer.getViewHtml()));
 
-        const controllerChannel = new BroadcastChannel('controller_channel');
-        controllerChannel.addEventListener("message", (event) => {
-            this.handleMessage(event.data);
+        this.simpleViewChannel = new BroadcastChannel('simpleview_channel');
+
+        this.simpleViewChannel.addEventListener("message", (event) => {
+            if(event.data === "init") {
+                this.timers.forEach(timer => {
+                    this.sendTimerMessageToSimpleViewChannel(timer);    
+                });
+            }
         });
-        controllerChannel.postMessage(settings.timers.length);
     }
-
-    private handleMessage(data:TimerCommand){
-        if(data.command === TimerCommandType.Start){
-            this.timers[data.timerId].startOrStop();
-        }
-        else if(data.command === TimerCommandType.Reset){
-            this.timers[data.timerId].reset();
-        }
-    }
-
 
     private async getSettings(): Promise<Settings> {
         const promise = fetch('./settings.json')
@@ -42,12 +44,26 @@ export class View {
         return promise;
     }
 
-    private getTimers(settings: Settings): Timer[] {
+    private getTimers(settings: Settings): TimerController[] {
         return settings.timers.map((timerSettings) => {
-            const timer = new Timer();
-            timer.setDuration(timerSettings.duration);
-            timer.setOptions(timerSettings.options);
-            return timer;
+            const timerController = new TimerController(timerSettings);
+            timerController.attach(this);
+            return timerController;
         });
+    }
+
+    private sendTimerMessageToSimpleViewChannel(timer:TimerController) {
+        const id = this.timers.indexOf(timer);
+        const message:TimerMessage =  new TimerMessage(
+            id,
+            timer.getRemainingTime(),
+            timer.getIsStarted()
+        );
+
+        this.simpleViewChannel.postMessage(message);
+    }
+
+    update(subject: Subject): void {
+        this.sendTimerMessageToSimpleViewChannel(subject as TimerController);
     }
 }
