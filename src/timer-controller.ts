@@ -14,6 +14,7 @@ export class TimerController implements Observer, Subject {
         this.timer = new Timer();
         this.view = new TimerView();
         this.timer.setDuration(settings.duration);
+        this.timer.setAlarmSettings(settings.alarm);
         this.timer.attach(this);
 
         this.view.setOptions(settings.options);
