@@ -1,5 +1,5 @@
-import { TimerView } from "./timer-view.js";
 import { Observer, Subject } from "./interfaces.js";
+import { AlarmSettings } from "./settings.js";
 
 export class Timer implements Subject {
     private isStarted: boolean;
@@ -8,6 +8,7 @@ export class Timer implements Subject {
     private intervalId: number | null;
     private initialDuration: number;
     private duration: number;
+    private alarmSettings: AlarmSettings;
     private remainingTime: number;
     private readonly REFRESH_INTERVAL: number = 100;
 
@@ -17,6 +18,7 @@ export class Timer implements Subject {
         this.addedTime = 0;
         this.duration = 0;
         this.intervalId = null;
+        this.alarmSettings = { sound: null, repeat: 0 };
         this.setRemainingTime();
     }
 
@@ -36,6 +38,10 @@ export class Timer implements Subject {
         this.observers.forEach((observer) => observer.update(this));
     }
     //#endregion
+
+    public setAlarmSettings(settings: AlarmSettings) {
+        this.alarmSettings = settings;
+    }
 
     public setDuration(duration: number) {
         this.initialDuration = Math.max(duration * 1000, 0);
@@ -89,6 +95,9 @@ export class Timer implements Subject {
         const currentTime = this.isStarted ? Date.now() - this.startTime + this.addedTime : this.addedTime;
         const calculatedRemainingTime = this.duration - currentTime;
         if (calculatedRemainingTime <= 0) {
+            if(this.isStarted && this.alarmSettings && this.alarmSettings?.sound && this.alarmSettings?.repeat > 0) {
+                this.playSound(this.alarmSettings.sound, this.alarmSettings.repeat);
+            }
             this.stop();
             this.addedTime = 0;
             this.duration = 0;
@@ -122,5 +131,32 @@ export class Timer implements Subject {
                 this.intervalId = null;
             }
         }
+    }
+
+    private playSound(soundFile: string , repeatTimes: number = 1) {
+        const soundPath = "./assets/sounds/" + soundFile;
+        if (!this.fileExists(soundPath) || repeatTimes <= 0) {
+            return;
+        }
+        
+        const audio = new Audio(soundPath);
+        audio.play();
+        audio.loop
+        audio.onended = () => {
+            if (repeatTimes > 1) {
+                this.playSound(soundFile, repeatTimes - 1);
+            }
+        }
+    }
+
+    private fileExists(filePath: string) : boolean {
+
+        var http = new XMLHttpRequest();
+    
+        http.open('HEAD', filePath, false);
+        http.send();
+    
+        console.log(http.status);
+        return http.status != 404;
     }
 }

@@ -2,11 +2,19 @@
     "timers": [
         {
             "duration": 10,
-            "options": [1, 60, 120, 180]
+            "options": [1, 60, 120, 180],
+            "alarm": {
+                "sound": "clock-alarm.mp3",
+                "repeat": 1
+            }
         },
         {
             "duration": 120,
-            "options": [1, 60, 120]
+            "options": [1, 60, 120],
+            "alarm": {
+                "sound": "beep-warning.mp3",
+                "repeat": 3
+            }
         },
         {
             "duration": 360,
