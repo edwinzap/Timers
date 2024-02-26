@@ -3,6 +3,7 @@ export interface Settings {
 }
 
 export interface TimerSettings {
+    title: string;
     duration: number;
     options: number[];
     alarm: AlarmSettings | null;

@@ -1,12 +1,13 @@
 import { Tools } from "./tools.js";
 
 export class TimerView {
-    private element: HTMLDivElement;
+    private container: HTMLDivElement;
     private text: HTMLSpanElement;
-    private optionsDiv: HTMLDivElement;
+    private optionsContainer: HTMLDivElement;
     private startButton: HTMLButtonElement;
     private resetButton: HTMLButtonElement;
     private options: number[];
+    private title: string | null;
 
     public startButtonHandler: (() => void) | null;
     public resetButtonHandler: (() => void) | null;
@@ -30,13 +31,14 @@ export class TimerView {
         }
     }
 
-    public setOptions(options: number[]) {
+    public setSettings(options: number[], title: string | null) {
         this.options = options;
-        this.updateView();
+        this.title = title;
+        this.initView();
     }
 
     public getElement(): HTMLDivElement {
-        return this.element;
+        return this.container;
     }
 
     private onClickStartButton() {
@@ -58,18 +60,34 @@ export class TimerView {
     }
 
     private initView() {
-        this.element = document.createElement('div');
-        this.element.classList.add('timer');
+        if (this.container) {
+            this.container.innerHTML = "";
+        }
+        else {
+            this.container = document.createElement('div');
+            this.container.classList.add('timer');
+        }
+
+        if (this.title) {
+            const title = document.createElement('h2');
+            title.textContent = this.title;
+            this.container.appendChild(title);
+        }
+
+        const timerBox = document.createElement('div');
+        timerBox.classList.add('timer-box')
+        this.container.appendChild(timerBox);
+
         this.text = document.createElement('div');
         this.text.classList.add('text');
-        this.element.appendChild(this.text);
+        timerBox.appendChild(this.text);
 
         this.startButton = document.createElement('button');
-        this.startButton.textContent = "Démarrer";
+        this.startButton.textContent = 'Démarrer';
         this.startButton.addEventListener('click', () => this.onClickStartButton());
 
         this.resetButton = document.createElement('button');
-        this.resetButton.textContent = "Réinitialiser";
+        this.resetButton.textContent = 'Réinitialiser';
         this.resetButton.addEventListener('click', () => this.onClickResetButton());
 
         const controlsContainer = document.createElement('div');
@@ -82,19 +100,17 @@ export class TimerView {
             div.appendChild(control);
             controlsContainer.appendChild(div);
         }
-        this.element.appendChild(controlsContainer);
+        timerBox.appendChild(controlsContainer);
 
-        this.optionsDiv = document.createElement('div');
-        this.optionsDiv.classList.add('options');
-        this.element.appendChild(this.optionsDiv);
-    }
+        this.optionsContainer = document.createElement('div');
+        this.optionsContainer.classList.add('options');
+        timerBox.appendChild(this.optionsContainer);
 
-    private updateView() {
         this.addOptions();
     }
 
     private addOptions() {
-        this.optionsDiv.innerHTML = "";
+        this.optionsContainer.innerHTML = "";
 
         for (const option of this.options) {
             const createButtonOptions = [{ class: "add", coef: 1, sign: "+" }, { class: "substract", coef: -1, "sign": "-" }];
@@ -123,7 +139,7 @@ export class TimerView {
             textElement.textContent = text;
             container.insertBefore(textElement, container.lastChild);
 
-            this.optionsDiv.appendChild(container);
+            this.optionsContainer.appendChild(container);
         }
     }
 

@@ -17,7 +17,7 @@ export class TimerController implements Observer, Subject {
         this.timer.setAlarmSettings(settings.alarm);
         this.timer.attach(this);
 
-        this.view.setOptions(settings.options);
+        this.view.setSettings(settings.options, settings.title);
         this.view.startButtonHandler = this.timer.startOrStop.bind(this.timer);
         this.view.resetButtonHandler = this.timer.reset.bind(this.timer);
         this.view.addTimeButtonHandler = this.timer.addTime.bind(this.timer);

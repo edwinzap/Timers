@@ -20,6 +20,7 @@ export class View implements Observer{
         document.body.insertBefore(simpleViewButton, container);
 
         const settings = await this.getSettings();
+        console.log(settings);
         this.timers = this.getTimers(settings);
         container.append(...this.timers.map((timer) => timer.getViewHtml()));
 

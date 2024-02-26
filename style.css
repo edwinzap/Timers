@@ -1,15 +1,30 @@
+@font-face {
+    font-family: 'cooper-hewit';
+    src: url(assets/fonts/CooperHewitt-Thin.ttf);
+}
+
 :root {
     --primary-color: #12405f;
-    --secondary-color: #dd3621;
-    --danger-color: #ef0a0d;
+    --secondary-color: #ef4a0d;
+    --danger-color: #d2331e;
     --warning-color: #e1c718;
-    --success-color: #169855;
-    --light-background-color: #cfdee9;
-    --dark-background-color: #0e1427;
+    --success-color: #319931;
+    --background-color: #0e1427;
+    --light-text-color: white;
+    --light-border-color: #12405f;
+
+    --font-family: 'Courier New', Courier, monospace; 
+    --timer-font-family: 'cooper-hewit';
+}
+
+* {
+    font-size: 100%;
+    font-family: var(--font-family);
 }
 
 body {
-    background-color: var(--light-background-color);
+    background-color: var(--background-color);
+    color: var(--light-text-color);
 }
 
 button {
@@ -17,8 +32,8 @@ button {
     border-radius: 0.4em;
     padding: 0.5em 1em;
     margin: 0.3em;
-    color: white;
     background-color: var(--primary-color);
+    color: var(--light-text-color);
 }
 
 button:hover {
@@ -31,57 +46,76 @@ button:hover {
     display: flex;
     flex-direction: row;
     justify-content: center;
+    align-items: flex-end;
     flex-wrap: wrap;
 }
 
 .timer {
-    padding: 2em;
+    padding: 1.3em;
+    min-width: 580px;
+
+}
+
+.timer,
+.timer-box {
     display: flex;
     flex-direction: column;
-    min-width: 280px;
+    align-items: center;
+}
+
+.timer-box {
+    padding: 1.4em;
+    border: 2px var(--light-border-color) solid;
+}
+
+.timer h2 {
+    text-align: center;
+    font-size: 2em;
 }
 
 .timer .text {
-    font-size: 3em;
+    font-size: 12em;
     font-weight: bold;
     text-align: center;
+    font-family: var(--timer-font-family);
 }
 
-.controls, .options {
+.timer .controls,
+.timer .options {
     display: inline-flex;
     flex-direction: row;
     align-items: stretch;
     justify-content: center;
-    gap: 0.5em;
+    gap: 1.5em;
+    padding: 10px;
 }
 
-.control {
-    width:100%;
-}
-
-.control button {
+.timer .control,
+.timer .control button {
     width: 100%;
+    border-radius: 10px;
 }
 
-.option {
+.timer .option {
     display: flex;
     flex-direction: column;
     text-align: center;
-    background-color: var(--light-background-color);
-    overflow: hidden;
+    background-color: var(--background-color);
     border-radius: 0.4em;
     padding: 0;
 }
 
-.options button {
+.timer .options button {
     margin: 0;
     padding: 0.2em 1.5em;
-    border-radius: 0;
+    border-radius: 8px;
+    min-width: 80px;
+    padding: 20px;
+    font-size: 1.2em;
 }
 
 .option .add {
     background-color: var(--success-color);
-    /* border-radius: 0.4em 0.4em 0 0 ; */
 }
 
 .option .add:hover {
@@ -90,7 +124,6 @@ button:hover {
 
 .option .substract {
     background-color: var(--danger-color);
-    /* border-radius: 0 0 0.4em 0.4em; */
 }
 
 .option .substract:hover {
