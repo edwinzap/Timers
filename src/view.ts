@@ -5,24 +5,34 @@ import { Observer, Subject, TimerMessage } from "./interfaces.js";
 export class View implements Observer{
     private timers: TimerController[];
     private simpleViewChannel: BroadcastChannel;
+    private container:HTMLDivElement;
 
     public constructor() {
         this.initView();
     }
 
     public async initView() {
-        const container = document.getElementById("container") as HTMLDivElement;
+        this.container = document.getElementById("container") as HTMLDivElement;
+
+        const settings = await this.getSettings();
+        console.log(settings);
+        this.timers = this.getTimers(settings);
+        this.container.append(...this.timers.map((timer) => timer.getViewHtml()));
+
+        if(settings.useSimpleView) {
+            this.initSimpleView();
+        }
+ 
+    }
+
+    private initSimpleView(){
         const simpleViewButton = document.createElement("button");
         simpleViewButton.textContent = "Vue simplifiée";
         simpleViewButton.onclick = () => {
             window.open("/view.html");
         }
-        document.body.insertBefore(simpleViewButton, container);
+        document.body.insertBefore(simpleViewButton, this.container);
 
-        const settings = await this.getSettings();
-        console.log(settings);
-        this.timers = this.getTimers(settings);
-        container.append(...this.timers.map((timer) => timer.getViewHtml()));
 
         this.simpleViewChannel = new BroadcastChannel('simpleview_channel');
 

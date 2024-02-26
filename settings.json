@@ -1,4 +1,5 @@
 {
+    "useSimpleView":false,
     "timers": [
         {
             "title": "Mon timer 1",
