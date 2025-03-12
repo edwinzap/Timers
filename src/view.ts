@@ -6,7 +6,8 @@ export class View implements Observer{
     private timers: TimerController[];
     private simpleViewChannel: BroadcastChannel;
     private container:HTMLDivElement;
-
+    private useSimpleView:boolean;
+    
     public constructor() {
         this.initView();
     }
@@ -20,6 +21,7 @@ export class View implements Observer{
         this.container.append(...this.timers.map((timer) => timer.getViewHtml()));
 
         if(settings.useSimpleView) {
+            this.useSimpleView = true;
             this.initSimpleView();
         }
  
@@ -71,10 +73,11 @@ export class View implements Observer{
             timer.getIsStarted()
         );
 
-        this.simpleViewChannel.postMessage(message);
+        this.simpleViewChannel?.postMessage(message);
     }
 
     update(subject: Subject): void {
-        this.sendTimerMessageToSimpleViewChannel(subject as TimerController);
+        if(this.useSimpleView)
+            this.sendTimerMessageToSimpleViewChannel(subject as TimerController);
     }
 }
